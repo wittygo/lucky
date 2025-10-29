@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Music Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fdbb2d, #b21f1f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        .add-song {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .add-song input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .add-song button {
+            padding: 12px 25px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .add-song button:hover {
+            background: linear-gradient(to right, #b21f1f, #fdbb2d);
+        }
+        
+        .player {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .now-playing {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            min-height: 30px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            color: #fdbb2d;
+        }
+        
+        .play-btn {
+            font-size: 2.5rem !important;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #1a2a6c, #fdbb2d);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .playlist {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .playlist h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .song-list {
+            list-style-type: none;
+        }
+        
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .song-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .song-item.active {
+            background-color: rgba(253, 187, 45, 0.2);
+            border-left: 4px solid #fdbb2d;
+        }
+        
+        .song-info {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .song-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .song-url {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            word-break: break-all;
+        }
+        
+        .song-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .song-actions button:hover {
+            color: #fdbb2d;
+        }
+        
+        .empty-playlist {
+            text-align: center;
+            padding: 30px;
+            opacity: 0.7;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .add-song {
+                flex-direction: column;
+            }
+            
+            .add-song input {
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .add-song button {
+                border-radius: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Simple Music Player</h1>
+            <p class="subtitle">Add songs by URL and create your playlist</p>
+        </header>
+        
+        <div class="add-song">
+            <input type="text" id="songUrl" placeholder="Paste song URL here (MP3, OGG, WAV)">
+            <button id="addBtn">Add to Playlist</button>
+        </div>
+        
+        <div class="player">
+            <div class="now-playing" id="nowPlaying">No song selected</div>
+            <div class="controls">
+                <button id="prevBtn">⏮</button>
+                <button id="playBtn" class="play-btn">▶</button>
+                <button id="nextBtn">⏭</button>
+            </div>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+        
+        <div class="playlist">
+            <h2>Your Playlist</h2>
+            <ul class="song-list" id="songList">
+                <li class="empty-playlist">Your playlist is empty. Add songs using the form above.</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Simple Music Player &copy; 2023 | Add your favorite songs and enjoy!</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const songUrlInput = document.getElementById('songUrl');
+            const addBtn = document.getElementById('addBtn');
+            const nowPlaying = document.getElementById('nowPlaying');
+            const playBtn = document.getElementById('playBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const currentTimeEl = document.getElementById('currentTime');
+            const durationEl = document.getElementById('duration');
+            const songList = document.getElementById('songList');
+            
+            // Audio player
+            const audio = new Audio();
+            let isPlaying = false;
+            let currentSongIndex = -1;
+            let playlist = [];
+            
+            // Add song to playlist
+            addBtn.addEventListener('click', addSong);
+            songUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addSong();
+            });
+            
+            function addSong() {
+                const url = songUrlInput.value.trim();
+                if (!url) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+                
+                // Create a simple song object
+                const song = {
+                    url: url,
+                    title: `Song ${playlist.length + 1}`,
+                    // In a real app, you might want to extract the actual song name from the URL
+                };
+                
+                playlist.push(song);
+                renderPlaylist();
+                songUrlInput.value = '';
+                
+                // If this is the first song, set it as current
+                if (playlist.length === 1) {
+                    currentSongIndex = 0;
+                    loadSong(currentSongIndex);
+                }
+            }
+            
+            // Render playlist
+            function renderPlaylist() {
+                if (playlist.length === 0) {
+                    songList.innerHTML = '<li class="empty-playlist">Your playlist is empty. Add songs using the form above.</li>';
+                    return;
+                }
+                
+                songList.innerHTML = '';
+                playlist.forEach((song, index) => {
+                    const li = document.createElement('li');
+                    li.className = `song-item ${index === currentSongIndex ? 'active' : ''}`;
+                    li.innerHTML = `
+                        <div class="song-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-url">${song.url}</div>
+                        </div>
+                        <div class="song-actions">
+                            <button class="play-song" data-index="${index}">▶</button>
+                            <button class="remove-song" data-index="${index}">✕</button>
+                        </div>
+                    `;
+                    songList.appendChild(li);
+                });
+                
+                // Add event listeners to playlist buttons
+                document.querySelectorAll('.play-song').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        playSong(index);
+                    });
+                });
+                
+                document.querySelectorAll('.remove-song').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        removeSong(index);
+                    });
+                });
+            }
+            
+            // Remove song from playlist
+            function removeSong(index) {
+                playlist.splice(index, 1);
+                
+                if (playlist.length === 0) {
+                    currentSongIndex = -1;
+                    audio.src = '';
+                    nowPlaying.textContent = 'No song selected';
+                    updatePlayButton();
+                } else if (index === currentSongIndex) {
+                    // If we're removing the currently playing song
+                    if (index >= playlist.length) {
+                        currentSongIndex = 0;
+                    }
+                    loadSong(currentSongIndex);
+                } else if (index < currentSongIndex) {
+                    currentSongIndex--;
+                }
+                
+                renderPlaylist();
+            }
+            
+            // Play song
+            function playSong(index) {
+                if (index === currentSongIndex && isPlaying) {
+                    pauseSong();
+                } else {
+                    if (index !== currentSongIndex) {
+                        currentSongIndex = index;
+                        loadSong(currentSongIndex);
+                    }
+                    playAudio();
+                }
+            }
+            
+            // Load song
+            function loadSong(index) {
+                if (index < 0 || index >= playlist.length) return;
+                
+                const song = playlist[index];
+                audio.src = song.url;
+                nowPlaying.textContent = `Now Playing: ${song.title}`;
+                updatePlayButton();
+                renderPlaylist();
+            }
+            
+            // Play audio
+            function playAudio() {
+                audio.play();
+                isPlaying = true;
+                updatePlayButton();
+            }
+            
+            // Pause audio
+            function pauseSong() {
+                audio.pause();
+                isPlaying = false;
+                updatePlayButton();
+            }
+            
+            // Update play button
+            function updatePlayButton() {
+                playBtn.textContent = isPlaying ? '⏸' : '▶';
+            }
+            
+            // Player controls
+            playBtn.addEventListener('click', function() {
+                if (playlist.length === 0) return;
+                
+                if (audio.paused) {
+                    if (audio.src === '') {
+                        loadSong(0);
+                    }
+                    playAudio();
+                } else {
+                    pauseSong();
+                }
+            });
+            
+            prevBtn.addEventListener('click', function() {
+                if (playlist.length === 0) return;
+                
+                currentSongIndex--;
+                if (currentSongIndex < 0) {
+                    currentSongIndex = playlist.length - 1;
+                }
+                loadSong(currentSongIndex);
+                playAudio();
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (playlist.length === 0) return;
+                
+                currentSongIndex++;
+                if (currentSongIndex >= playlist.length) {
+                    currentSongIndex = 0;
+                }
+                loadSong(currentSongIndex);
+                playAudio();
+            });
+            
+            // Update progress bar
+            audio.addEventListener('timeupdate', updateProgress);
+            
+            function updateProgress() {
+                if (audio.duration) {
+                    const progressPercent = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+                    
+                    // Update time displays
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                    durationEl.textContent = formatTime(audio.duration);
+                }
+            }
+            
+            // Set progress
+            progressContainer.addEventListener('click', setProgress);
+            
+            function setProgress(e) {
+                const width = this.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                
+                audio.currentTime = (clickX / width) * duration;
+            }
+            
+            // Format time
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+            
+            // When song ends
+            audio.addEventListener('ended', function() {
+                nextBtn.click();
+            });
+            
+            // Add some example songs on first load
+            if (localStorage.getItem('playlistInitialized') === null) {
+                // These are example URLs - in a real app, you would use actual song URLs
+                const exampleSongs = [
+                    {
+                        url: 'https://example.com/song1.mp3',
+                        title: 'Example Song 1'
+                    },
+                    {
+                        url: 'https://example.com/song2.mp3',
+                        title: 'Example Song 2'
+                    }
+                ];
+                
+                // Add example songs to playlist
+                exampleSongs.forEach(song => {
+                    playlist.push(song);
+                });
+                
+                renderPlaylist();
+                localStorage.setItem('playlistInitialized', 'true');
+            }
+        });
+    </script>
+</body>
+</html>
