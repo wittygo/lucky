@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>இந்திய மாநில அரசு இணையதளங்கள்</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="flag"></div>
+
+<section id="login">
+  <div class="box">
+    <div class="hrow"><h1 data-t="loginTitle"></h1><div class="langbar" id="langL"></div></div>
+    <p data-t="loginSub"></p>
+    
+    <label for="uname" data-t="user"></label>
+    <input id="uname" autocomplete="username" maxlength="30">
+    <label for="phone" data-t="phone"></label>
+    <input id="phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="9XXXXXXXXX">
+    <button class="btn" id="send" type="button" data-t="send"></button>
+    <div id="otpBox" class="hidden">
+      <label for="otp" data-t="otp"></label>
+      <input id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+      <button class="btn" id="verify" type="button" data-t="verify"></button>
+    </div>
+    <div class="msg" id="msg" role="status"></div>
+  </div>
+</section>
+
+<div id="home" class="hidden">
+  <header class="hh"><button class="btn ghost" id="toState" type="button" style="margin:0">மாநிலப் பக்கம்</button><div class="r"><b id="hw"></b><button class="btn ghost" id="hout" type="button" style="margin:0">வெளியேறு</button></div></header>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="hgrid"><aside id="map" aria-label="India map"></aside><section class="hbody" id="hbody"></section></div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <select id="sel" aria-label="State"></select>
+    <h2 id="greet"></h2>
+    <div class="right"><button class="btn ghost" id="toHome" type="button" style="margin:0">முகப்பு</button><span class="uname" id="who"></span><button class="btn ghost" id="out" type="button" data-t="logout"></button></div>
+  </header>
+  <nav class="langbar" id="langA" aria-label="Language"></nav>
+  <main>
+    <ul id="list"></ul>
+    <article class="state">
+      <span class="count" id="count"></span>
+      <h3 id="sname"></h3>
+      <p class="en" id="sen"></p>
+      <span class="url" id="surl"></span>
+      <div class="acts">
+        <a class="btn" id="open" target="_blank" rel="noopener noreferrer"></a>
+        <button class="btn ghost" id="next" type="button"></button>
+      </div>
+    </article>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
